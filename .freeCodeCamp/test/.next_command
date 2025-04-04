@@ -269,3 +269,8 @@ git commit -m "SQL"
 git checkout -b main
 git add
 git add .
+git commit -m "update sql"
+git push
+ls --color=auto
+rm universe1.sql
+git add .
