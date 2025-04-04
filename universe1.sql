@@ -50,11 +50,10 @@ SET default_table_access_method = heap;
 CREATE TABLE public.galaxy (
     galaxy_id integer NOT NULL,
     name character varying(255) NOT NULL,
-    description text,
-    galaxy_type character varying(255),
-    has_life boolean DEFAULT false NOT NULL,
-    age_in_millions_of_years integer NOT NULL,
-    distance_from_earth numeric(10,2) NOT NULL
+    type character varying(255),
+    size integer NOT NULL,
+    discovered date,
+    has_life boolean DEFAULT false NOT NULL
 );
 
 
@@ -143,9 +142,9 @@ CREATE TABLE public.planet (
     name character varying(255) NOT NULL,
     star_id integer NOT NULL,
     size integer NOT NULL,
-    is_spherical boolean DEFAULT false NOT NULL,
-    planet_type character varying(255) NOT NULL,
-    distance_from_star numeric(10,2) NOT NULL
+    has_rings boolean DEFAULT false NOT NULL,
+    distance_from_sun bigint NOT NULL,
+    mass numeric(10,2) NOT NULL
 );
 
 
@@ -183,8 +182,7 @@ CREATE TABLE public.star (
     galaxy_id integer NOT NULL,
     luminosity numeric(10,2) NOT NULL,
     mass integer NOT NULL,
-    is_spherical boolean DEFAULT false NOT NULL,
-    distance_from_earth numeric(10,2) NOT NULL
+    is_supernova boolean DEFAULT false NOT NULL
 );
 
 
@@ -244,12 +242,12 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 -- Data for Name: galaxy; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.galaxy VALUES (1, 'Milky Way', 'Our galaxy, containing our solar system.', 'Spiral', true, 13000, 0.00);
-INSERT INTO public.galaxy VALUES (2, 'Andromeda', 'A nearby spiral galaxy.', 'Spiral', false, 10000, 2.50);
-INSERT INTO public.galaxy VALUES (3, 'Triangulum', 'A small spiral galaxy near Andromeda.', 'Spiral', true, 12000, 3.00);
-INSERT INTO public.galaxy VALUES (4, 'Whirlpool', 'A galaxy known for its distinct spiral arms.', 'Spiral', false, 3000, 10.50);
-INSERT INTO public.galaxy VALUES (5, 'Sombrero', 'A galaxy with a large bulge at the center.', 'Spiral', false, 8000, 35.00);
-INSERT INTO public.galaxy VALUES (6, 'Messier 87', 'A large elliptical galaxy in the Virgo Cluster.', 'Elliptical', false, 13000, 50.00);
+INSERT INTO public.galaxy VALUES (1, 'Milky Way', 'Spiral', 100000, '2025-04-04', true);
+INSERT INTO public.galaxy VALUES (2, 'Andromeda', 'Spiral', 220000, '2025-04-04', false);
+INSERT INTO public.galaxy VALUES (3, 'Triangulum', 'Spiral', 40000, '2025-04-04', true);
+INSERT INTO public.galaxy VALUES (4, 'Whirlpool', 'Spiral', 30000, '2025-04-04', false);
+INSERT INTO public.galaxy VALUES (5, 'Sombrero', 'Spiral', 50000, '2025-04-04', true);
+INSERT INTO public.galaxy VALUES (6, 'Messier 87', 'Elliptical', 120000, '2025-04-04', false);
 
 
 --
@@ -293,30 +291,30 @@ INSERT INTO public.moon VALUES (20, 'Oberon', 5, 1523, true, -220.00);
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.planet VALUES (1, 'Earth', 1, 12742, true, 'Terrestrial', 1.00);
-INSERT INTO public.planet VALUES (2, 'Mars', 1, 6779, true, 'Terrestrial', 1.50);
-INSERT INTO public.planet VALUES (3, 'Jupiter', 2, 139820, true, 'Gas Giant', 5.20);
-INSERT INTO public.planet VALUES (4, 'Saturn', 2, 116460, true, 'Gas Giant', 9.50);
-INSERT INTO public.planet VALUES (5, 'Venus', 3, 12104, true, 'Terrestrial', 0.72);
-INSERT INTO public.planet VALUES (6, 'Mercury', 3, 4879, true, 'Terrestrial', 0.39);
-INSERT INTO public.planet VALUES (7, 'Uranus', 4, 50724, true, 'Ice Giant', 19.20);
-INSERT INTO public.planet VALUES (8, 'Neptune', 5, 49528, true, 'Ice Giant', 30.10);
-INSERT INTO public.planet VALUES (9, 'Pluto', 6, 2376, false, 'Dwarf Planet', 39.50);
-INSERT INTO public.planet VALUES (10, 'Titan', 1, 5150, true, 'Moon', 1.22);
-INSERT INTO public.planet VALUES (11, 'Ceres', 4, 940, true, 'Dwarf Planet', 2.70);
-INSERT INTO public.planet VALUES (12, 'Earth II', 1, 13000, true, 'Terrestrial', 1.20);
+INSERT INTO public.planet VALUES (1, 'Earth', 1, 12742, false, 149600000, 5.97);
+INSERT INTO public.planet VALUES (2, 'Mars', 1, 6779, false, 227900000, 0.64);
+INSERT INTO public.planet VALUES (3, 'Jupiter', 1, 139820, true, 778500000, 1898.00);
+INSERT INTO public.planet VALUES (4, 'Saturn', 2, 116460, true, 1427000000, 568.00);
+INSERT INTO public.planet VALUES (5, 'Venus', 2, 12104, false, 108200000, 0.82);
+INSERT INTO public.planet VALUES (6, 'Mercury', 3, 4879, false, 57900000, 0.33);
+INSERT INTO public.planet VALUES (7, 'Uranus', 4, 50724, true, 2871000000, 14.50);
+INSERT INTO public.planet VALUES (8, 'Neptune', 5, 49528, true, 4495000000, 17.20);
+INSERT INTO public.planet VALUES (9, 'Pluto', 6, 2376, false, 5906000000, 0.01);
+INSERT INTO public.planet VALUES (10, 'Titan', 1, 5150, true, 120000000, 1.35);
+INSERT INTO public.planet VALUES (11, 'Ceres', 4, 940, false, 255000000, 0.00);
+INSERT INTO public.planet VALUES (12, 'Earth II', 1, 13000, false, 199800000, 1.00);
 
 
 --
 -- Data for Name: star; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.star VALUES (1, 'Sun', 1, 3.85, 1989000, true, 0.00);
-INSERT INTO public.star VALUES (2, 'Alpha Centauri', 1, 1.52, 2500000, true, 4.37);
-INSERT INTO public.star VALUES (3, 'Betelgeuse', 2, 1.21, 2000000, false, 642.50);
-INSERT INTO public.star VALUES (4, 'Sirius', 3, 25.40, 4000000, true, 8.60);
-INSERT INTO public.star VALUES (5, 'Rigel', 4, 120.30, 1300000, true, 863.00);
-INSERT INTO public.star VALUES (6, 'Proxima Centauri', 5, 0.00, 1500000, false, 4.20);
+INSERT INTO public.star VALUES (1, 'Sun', 1, 3.85, 1989000, false);
+INSERT INTO public.star VALUES (2, 'Alpha Centauri', 1, 1.52, 2500000, false);
+INSERT INTO public.star VALUES (3, 'Betelgeuse', 2, 1.21, 2000000, true);
+INSERT INTO public.star VALUES (4, 'Sirius', 3, 25.40, 4000000, false);
+INSERT INTO public.star VALUES (5, 'Rigel', 4, 120.30, 1300000, true);
+INSERT INTO public.star VALUES (6, 'Proxima Centauri', 5, 0.00, 1500000, false);
 
 
 --
