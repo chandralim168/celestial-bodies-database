@@ -320,3 +320,9 @@ ls --color=auto
 psql --username=freecodecamp --dbname=postgres
 psql -U postgres < universe.sql
 psql --username=freecodecamp --dbname=postgres
+rm universe.sql
+ls --color=auto
+ls --color=auto
+pg_dump -cC --inserts -U freecodecamp universe > universe.sql
+ls --color=auto
+git add .

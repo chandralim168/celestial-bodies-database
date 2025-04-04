@@ -87,6 +87,8 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 --
 
 CREATE TABLE public.galaxy_star_planet_moon (
+    galaxy_star_planet_moon_id integer NOT NULL,
+    name character varying(255) NOT NULL,
     galaxy_id integer NOT NULL,
     star_id integer NOT NULL,
     planet_id integer NOT NULL,
@@ -95,6 +97,28 @@ CREATE TABLE public.galaxy_star_planet_moon (
 
 
 ALTER TABLE public.galaxy_star_planet_moon OWNER TO freecodecamp;
+
+--
+-- Name: galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq OWNED BY public.galaxy_star_planet_moon.galaxy_star_planet_moon_id;
+
 
 --
 -- Name: moon; Type: TABLE; Schema: public; Owner: freecodecamp
@@ -220,6 +244,13 @@ ALTER TABLE ONLY public.galaxy ALTER COLUMN galaxy_id SET DEFAULT nextval('publi
 
 
 --
+-- Name: galaxy_star_planet_moon galaxy_star_planet_moon_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy_star_planet_moon ALTER COLUMN galaxy_star_planet_moon_id SET DEFAULT nextval('public.galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq'::regclass);
+
+
+--
 -- Name: moon moon_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -256,11 +287,11 @@ INSERT INTO public.galaxy VALUES (6, 'Messier 87', 'A large elliptical galaxy in
 -- Data for Name: galaxy_star_planet_moon; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.galaxy_star_planet_moon VALUES (1, 1, 1, 1);
-INSERT INTO public.galaxy_star_planet_moon VALUES (1, 1, 2, 2);
-INSERT INTO public.galaxy_star_planet_moon VALUES (1, 2, 3, 3);
-INSERT INTO public.galaxy_star_planet_moon VALUES (2, 3, 4, 4);
-INSERT INTO public.galaxy_star_planet_moon VALUES (3, 4, 5, 5);
+INSERT INTO public.galaxy_star_planet_moon VALUES (1, 'Milky Way -> Sun -> Earth -> Moon', 1, 1, 1, 1);
+INSERT INTO public.galaxy_star_planet_moon VALUES (2, 'Milky Way -> Sun -> Mars -> Phobos', 1, 1, 2, 2);
+INSERT INTO public.galaxy_star_planet_moon VALUES (3, 'Andromeda -> Alpha Centauri -> Jupiter -> Io', 1, 2, 3, 3);
+INSERT INTO public.galaxy_star_planet_moon VALUES (4, 'Triangulum -> Betelgeuse -> Saturn -> Titan', 2, 3, 4, 4);
+INSERT INTO public.galaxy_star_planet_moon VALUES (5, 'Whirlpool -> Sirius -> Uranus -> Miranda', 3, 4, 5, 5);
 
 
 --
@@ -327,6 +358,13 @@ SELECT pg_catalog.setval('public.galaxy_galaxy_id_seq', 6, true);
 
 
 --
+-- Name: galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.galaxy_star_planet_moon_galaxy_star_planet_moon_id_seq', 5, true);
+
+
+--
 -- Name: moon_moon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
@@ -364,11 +402,19 @@ ALTER TABLE ONLY public.galaxy
 
 
 --
+-- Name: galaxy_star_planet_moon galaxy_star_planet_moon_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy_star_planet_moon
+    ADD CONSTRAINT galaxy_star_planet_moon_name_key UNIQUE (name);
+
+
+--
 -- Name: galaxy_star_planet_moon galaxy_star_planet_moon_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.galaxy_star_planet_moon
-    ADD CONSTRAINT galaxy_star_planet_moon_pkey PRIMARY KEY (galaxy_id, star_id, planet_id, moon_id);
+    ADD CONSTRAINT galaxy_star_planet_moon_pkey PRIMARY KEY (galaxy_star_planet_moon_id);
 
 
 --
